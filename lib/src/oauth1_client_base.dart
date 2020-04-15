@@ -1,0 +1,1 @@
+class OAuth1Client {}
