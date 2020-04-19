@@ -6,7 +6,7 @@
 // https://raw.githubusercontent.com/mrtcndnlr/oauth1_client/master/LICENSE
 //
 // Created:  2020-04-16T09:22:04.838Z
-// Modified: 2020-04-17T22:47:40.687Z
+// Modified: 2020-04-19T15:02:10.044Z
 //
 
 import 'dart:io';
@@ -25,6 +25,7 @@ class OAuth1Client {
   Client _client;
   final AuthorizationHeader _authorizationHeader = AuthorizationHeader();
   TemporaryCredentials _temporaryCredentials;
+  http.Response _lastResponse;
 
   OAuth1Client(ConsumerCredentials consumer) {
     _authorizationHeader.consumer = consumer;
@@ -36,19 +37,22 @@ class OAuth1Client {
   set token(TokenCredentials value) => _authorizationHeader.token = value;
 
   Future<TokenCredentials> fetchAccessToken(String url, String verifier) async {
-    var response = await _client.post(
+    _lastResponse = await _client.post(
         '$url?oauth_token=${_temporaryCredentials.identifier}&oauth_verifier=$verifier');
-    return TokenCredentials.fromResponse(response.body);
+    return TokenCredentials.fromResponse(_lastResponse.body);
   }
 
   Future<TemporaryCredentials> fetchRequestToken(String url) async {
-    var response = await _client.post(url,
+    _lastResponse = await _client.post(url,
         headers: {HttpHeaders.authorizationHeader: 'oauth_callback'});
-    _temporaryCredentials = TemporaryCredentials.fromResponse(response.body);
+    _temporaryCredentials =
+        TemporaryCredentials.fromResponse(_lastResponse.body);
     return _temporaryCredentials;
   }
 
   String getAuthorizationUrl(url) {
     return '$url?oauth_token=${_temporaryCredentials.identifier}';
   }
+
+  http.Response get lastResponse => _lastResponse;
 }

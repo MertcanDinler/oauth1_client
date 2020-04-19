@@ -1,6 +1,6 @@
 name: oauth1_client
 description: An Oauth1 library.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/mrtcndnlr/oauth1_client
 
 environment:
