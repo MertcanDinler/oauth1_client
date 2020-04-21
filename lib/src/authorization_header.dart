@@ -6,7 +6,7 @@
 // https://raw.githubusercontent.com/mrtcndnlr/oauth1_client/master/LICENSE
 //
 // Created:  2020-04-16T11:10:36.220Z
-// Modified: 2020-04-17T22:46:32.835Z
+// Modified: 2020-04-21T22:08:00.371Z
 //
 
 import 'dart:convert';
@@ -68,7 +68,7 @@ class AuthorizationHeader {
   void initRequest(String method, String url) {
     params.clear();
     this.method = method;
-    this.url = url;
+    this.url = url.split('?')[0];
   }
 
   @override
